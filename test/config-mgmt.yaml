@@ -1,0 +1,19 @@
+# config-management.yaml
+
+apiVersion: configmanagement.gke.io/v1
+kind: ConfigManagement
+metadata:
+  name: config-management
+spec:
+  enableMultiRepo: true
+  enableLegacyFields: true
+  policyController:
+    enabled: true
+  clusterName: krmapihost-config-controller
+  git:
+    policyDir: /
+    secretType: gcpserviceaccount
+    gcpServiceAccountEmail: config-sync-sa@kpt-bootstrap-001.iam.gserviceaccount.com
+    syncBranch: master
+    syncRepo: https://source.developers.google.com/p/kpt-bootstrap-001/r/config-controller-source
+  sourceFormat: unstructured

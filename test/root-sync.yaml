@@ -1,0 +1,15 @@
+# root-sync.yaml
+
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: root-sync
+  namespace: config-management-system
+spec:
+  sourceFormat: unstructured
+  git:
+    repo: https://github.com/mbychkowski/gcp-config-controller-gitops.git
+    revision: HEAD
+    branch: main
+    dir: "config-sync"
+    auth: none

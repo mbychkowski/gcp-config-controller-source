@@ -1,0 +1,13 @@
+# sourcerepo.yaml
+
+apiVersion: serviceusage.cnrm.cloud.google.com/v1beta1
+kind: Service
+metadata:
+  name: sourcerepo.googleapis.com
+  namespace: config-control
+---
+apiVersion: sourcerepo.cnrm.cloud.google.com/v1beta1
+kind: SourceRepoRepository
+metadata:
+  name: config-controller-source
+  namespace: config-control

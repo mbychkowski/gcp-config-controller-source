@@ -1,0 +1,33 @@
+steps:
+- id: 'Branch name'
+  name: 'alpine'
+  entrypoint: 'sh'  
+  args: 
+  - '-c'
+  - | 
+      echo "***********************"
+      echo "$BRANCH_NAME"
+      echo "***********************"
+
+- id: 'Git clone'
+  name: 'git'
+  entrypoint: /bin/bash
+  dir: /workspace
+  args: 
+  - '-c'
+  - | 
+      echo "***********************"
+      echo "$BRANCH_NAME"
+      echo "***********************"
+
+- id: "GitOps blueprint"
+  name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+  dir: /workspace
+  entrypoint: /bin/bash
+  args:
+    - '-c'
+    - |
+      set -e
+      make gitops-blueprint
+
+
