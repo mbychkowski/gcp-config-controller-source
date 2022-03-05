@@ -10,15 +10,13 @@ steps:
       echo "***********************"
 
 - id: 'Git ssh-keygen setup'
-  name: 'alpine'
+  name: 'busybox'
   entrypoint: 'sh'
   dir: /workspace
   args: 
   - '-c'
   - | 
-      apk update && \
-      apk add --no-cache \
-      openssh-keygen
+      apk update
 
       mkdir ~/.ssh
       echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> ~/.ssh/id_ed25519_cloudbuild
