@@ -21,12 +21,12 @@ steps:
       openssh-keygen
 
       mkdir ~/.ssh
-      echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> ~/.ssh/id_ed25519_cloudbuild
+      echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
       cat << EOF > config
       Host *
         AddKeysToAgent yes
         UseKeychain yes
-        IdentityFile ~/.ssh/id_ed25519_cloudbuild
+        IdentityFile /workspace/.ssh/id_ed25519_cloudbuild
       EOF
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
 
@@ -37,10 +37,10 @@ steps:
   args: 
   - '-c'
   - | 
-      cat ~/.ssh/config
+      cat /workspace/.ssh/config
       git clone https://github.com/mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
-  secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']    
+  waitFor: ["Git ssh-keygen setup"] 
 
 # - id: "GitOps blueprint"
 #   name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
