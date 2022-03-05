@@ -97,7 +97,7 @@ ssh-key:
 	@ssh-keygen -f id_ed25519_cloudbuild -C ${GIT_EMAIL} -q -N ""
 	_KEY=GITOPS_DEPLOY_REPO_SSH_KEY
 	_VAL=$$(cat id_ed25519_cloudbuild)
-	@echo -n $$_VAL | gcloud secrets create $$_KEY \
+	@echo $$_VAL | gcloud secrets create $$_KEY \
 	--replication-policy="automatic" \
 	--data-file=-;
 	@rm id_ed25519_cloudbuild
