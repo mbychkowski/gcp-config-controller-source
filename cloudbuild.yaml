@@ -11,7 +11,7 @@ steps:
 
 - id: 'Git ssh-keygen setup'
   name: 'alpine'
-  entrypoint: /bin/bash
+  entrypoint: 'sh'
   dir: /workspace
   args: 
   - '-c'
