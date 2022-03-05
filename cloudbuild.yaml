@@ -10,17 +10,18 @@ steps:
       echo "***********************"
 
 - id: 'Git ssh-keygen setup'
-  name: 'busybox'
+  name: 'alpine'
   entrypoint: 'sh'
   dir: /workspace
   args: 
   - '-c'
   - | 
-      apk update
+      apk update && \
+      apk add --no-cache \
+      openssh-keygen
 
       mkdir ~/.ssh
       echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> ~/.ssh/id_ed25519_cloudbuild
-      eval "$(ssh-agent -s)"
       cat << EOF > config
       Host *
         AddKeysToAgent yes
