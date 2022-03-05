@@ -54,5 +54,5 @@ steps:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO/versions/latest
+    - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO_SSH_KEY/versions/latest
       env: GITOPS_DEPLOY_REPO_SSH_KEY      
