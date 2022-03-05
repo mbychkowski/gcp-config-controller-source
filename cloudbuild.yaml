@@ -23,12 +23,6 @@ steps:
       mkdir /workspace/.ssh
       echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
       chmod 400 /workspace/.ssh/id_ed25519_cloudbuild
-      cat << EOF > /workspace/.ssh/config
-      Host *
-        AddKeysToAgent yes
-        UseKeychain yes
-        IdentityFile /workspace/.ssh/id_ed25519_cloudbuild
-      EOF
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
 
 - id: 'Git clone deploy repo'
@@ -59,3 +53,10 @@ availableSecrets:
   secretManager:
     - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO_SSH_KEY/versions/latest
       env: GITOPS_DEPLOY_REPO_SSH_KEY      
+
+      # cat << EOF > /workspace/.ssh/config
+      # Host *
+      #   AddKeysToAgent yes
+      #   UseKeychain yes
+      #   IdentityFile /workspace/.ssh/id_ed25519_cloudbuild
+      # EOF
