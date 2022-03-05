@@ -37,8 +37,8 @@ steps:
   args: 
   - '-c'
   - | 
-      ls -la /workspace
-      cat /workspace/.ssh/config
+      ls -la /workspace/.ssh
+      ssh-add -K /workspace/.ssh/id_ed25519_cloudbuild
       git config --global user.name "Michael Bychkowski"
       git config --global user.email mbychkowski@google.com
       ssh -T git@github.com
