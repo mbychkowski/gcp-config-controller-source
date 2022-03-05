@@ -39,6 +39,9 @@ steps:
   - | 
       ls -la /workspace
       cat /workspace/.ssh/config
+      git config --global user.name "Michael Bychkowski"
+      git config --global user.email mbychkowski@google.com
+      ssh -T git@github.com
       git clone https://github.com/mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
   waitFor: ["Git ssh-keygen setup"] 
