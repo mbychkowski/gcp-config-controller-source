@@ -9,25 +9,50 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
 
-- id: 'Git clone'
-  name: 'git'
+- id: 'Git ssh-keygen setup'
+  name: 'alpine'
+  entrypoint: 'sh'
+  dir: /workspace
+  args: 
+  - '-c'
+  - | 
+      apk update && \
+      apk add --no-cache \
+      openssh-keygen
+
+      mkdir ~/.ssh
+      echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> ~/.ssh/id_ed25519_cloudbuild
+      eval "$(ssh-agent -s)"
+      cat << EOF > config
+      Host *
+        AddKeysToAgent yes
+        UseKeychain yes
+        IdentityFile ~/.ssh/id_ed25519_cloudbuild
+      EOF
+      ssh-add -K ~/.ssh/id_ed25519_cloudbuild
+  secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
+
+- id: 'Git clone deploy repo'
+  name: 'alpine/git'
   entrypoint: /bin/bash
   dir: /workspace
   args: 
   - '-c'
   - | 
-      echo "***********************"
-      echo "$BRANCH_NAME"
-      echo "***********************"
+      git clone https://github.com/mbychkowski/gcp-config-controller-deploy.git
+      ls gcp-config-controller-deploy
+      ls ~/.ssh
+  secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']    
 
-- id: "GitOps blueprint"
-  name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-  dir: /workspace
-  entrypoint: /bin/bash
-  args:
-    - '-c'
-    - |
-      set -e
-      make gitops-blueprint
+# - id: "GitOps blueprint"
+#   name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+#   dir: /workspace
+#   entrypoint: /bin/bash
+#   args:
+#     - '-c'
+#     - |
 
-
+availableSecrets:
+  secretManager:
+    - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO/versions/latest
+      env: GITOPS_DEPLOY_REPO_SSH_KEY      

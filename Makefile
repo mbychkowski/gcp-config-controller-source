@@ -93,6 +93,15 @@ config-controller:
 create-org-policies:
 	sh .hack/org-policy/create.sh ${PROJECT_NUMBER}
 
+ssh-key:
+	@ssh-keygen -f id_ed25519_cloudbuild -C ${GIT_EMAIL} -q -N ""
+	_KEY=GITOPS_DEPLOY_REPO_SSH_KEY
+	_VAL=$$(cat id_ed25519_cloudbuild)
+	@echo -n $$_VAL | gcloud secrets create $$_KEY \
+	--replication-policy="automatic" \
+	--data-file=-;
+	@rm id_ed25519_cloudbuild
+
 enable-argolis-org-policies: create-org-policies
 	@gcloud org-policies set-policy .hack/org-policy/shieldedVm.yaml
 	@gcloud org-policies set-policy .hack/org-policy/vmCanIpForward.yaml
