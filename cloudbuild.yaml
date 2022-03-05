@@ -16,13 +16,10 @@ steps:
   args: 
   - '-c'
   - | 
-      apk update && \
-      apk add --no-cache \
-      openssh-keygen
-
       mkdir /workspace/.ssh
-      echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
+      echo $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
       chmod 400 /workspace/.ssh/id_ed25519_cloudbuild
+      /workspace/.ssh/id_ed25519_cloudbuild
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
 
 - id: 'Git clone deploy repo'
