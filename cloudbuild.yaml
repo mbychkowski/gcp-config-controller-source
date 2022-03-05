@@ -32,7 +32,7 @@ steps:
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
-  entrypoint: /bin/bash
+  entrypoint: 'sh'
   dir: /workspace
   args: 
   - '-c'
