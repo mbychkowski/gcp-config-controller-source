@@ -28,7 +28,6 @@ steps:
         UseKeychain yes
         IdentityFile ~/.ssh/id_ed25519_cloudbuild
       EOF
-      ssh-add -K ~/.ssh/id_ed25519_cloudbuild
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
 
 - id: 'Git clone deploy repo'
@@ -38,9 +37,9 @@ steps:
   args: 
   - '-c'
   - | 
+      cat ~/.ssh/config
       git clone https://github.com/mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
-      ls ~/.ssh
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']    
 
 # - id: "GitOps blueprint"
