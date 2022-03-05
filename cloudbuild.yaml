@@ -20,13 +20,14 @@ steps:
       apk add --no-cache \
       openssh-keygen
 
-      mkdir ~/.ssh
-      echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
+      ls -la ~/
+      mkdir ~/workspace/.ssh
+      echo -n $$GITOPS_DEPLOY_REPO_SSH_KEY >> ~/workspace/.ssh/id_ed25519_cloudbuild
       cat << EOF > config
       Host *
         AddKeysToAgent yes
         UseKeychain yes
-        IdentityFile /workspace/.ssh/id_ed25519_cloudbuild
+        IdentityFile ~/workspace/.ssh/id_ed25519_cloudbuild
       EOF
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
 
@@ -37,7 +38,7 @@ steps:
   args: 
   - '-c'
   - | 
-      cat /workspace/.ssh/config
+      cat ~/workspace/.ssh/config
       git clone https://github.com/mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
   waitFor: ["Git ssh-keygen setup"] 
