@@ -10,16 +10,14 @@ steps:
       echo "***********************"
 
 - id: 'Git ssh-keygen setup'
-  name: 'alpine'
-  entrypoint: 'sh'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
   dir: /workspace
   args: 
   - '-c'
   - | 
       mkdir /workspace/.ssh
-      echo $$GITOPS_DEPLOY_REPO_SSH_KEY
-      cat $$GITOPS_DEPLOY_REPO_SSH_KEY
-      echo $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
+      gcloud secrets versions access latest --secret=GITOPS_DEPLOY_REPO_SSH_KEY --format='get(payload.data)' | tr '_-' '/+' | base64 -d > /workspace/.ssh/id_ed25519_cloudbuild
       chmod 400 /workspace/.ssh/id_ed25519_cloudbuild
       cat /workspace/.ssh/id_ed25519_cloudbuild
   secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
