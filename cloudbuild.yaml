@@ -30,9 +30,9 @@ steps:
       eval "$(ssh-agent -s)"
       ssh-add /workspace/.ssh/id_ed25519_cloudbuild
       git config --global user.name "Michael Bychkowski"
-      git config --global user.email mbychkowski@google.com
+      git config --global user.email "mbychkowski@google.com"
       ssh -T git@github.com
-      git clone https://github.com/mbychkowski/gcp-config-controller-deploy.git
+      git clone git@github.com:mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
   waitFor: ["Git ssh-keygen setup"] 
 
