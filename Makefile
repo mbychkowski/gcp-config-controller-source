@@ -96,9 +96,9 @@ create-org-policies:
 ssh-key:
 	@ssh-keygen -t ed25519 -f id_ed25519_cloudbuild -C ${GIT_EMAIL} -q -N ""
 	_KEY=GITOPS_DEPLOY_REPO_SSH_KEY
-	cat id_ed25519_cloudbuild | gcloud secrets create $$_KEY \
+	gcloud secrets create $$_KEY \
 	--replication-policy="automatic" \
-	--data-file=-;
+	--data-file=id_ed25519_cloudbuild;
 	# @rm id_ed25519_cloudbuild
 
 enable-argolis-org-policies: create-org-policies

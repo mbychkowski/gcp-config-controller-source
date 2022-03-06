@@ -17,6 +17,8 @@ steps:
   - '-c'
   - | 
       mkdir /workspace/.ssh
+      echo $$GITOPS_DEPLOY_REPO_SSH_KEY
+      cat $$GITOPS_DEPLOY_REPO_SSH_KEY
       echo $$GITOPS_DEPLOY_REPO_SSH_KEY >> /workspace/.ssh/id_ed25519_cloudbuild
       chmod 400 /workspace/.ssh/id_ed25519_cloudbuild
       cat /workspace/.ssh/id_ed25519_cloudbuild
