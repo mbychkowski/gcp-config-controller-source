@@ -19,8 +19,6 @@ steps:
       mkdir /workspace/.ssh
       gcloud secrets versions access latest --secret=GITOPS_DEPLOY_REPO_SSH_KEY --format='get(payload.data)' | tr '_-' '/+' | base64 -d > /workspace/.ssh/id_ed25519_cloudbuild
       chmod 400 /workspace/.ssh/id_ed25519_cloudbuild
-      cat /workspace/.ssh/id_ed25519_cloudbuild
-  secretEnv: ['GITOPS_DEPLOY_REPO_SSH_KEY']
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
@@ -46,10 +44,10 @@ steps:
 #     - '-c'
 #     - |
 
-availableSecrets:
-  secretManager:
-    - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO_SSH_KEY/versions/latest
-      env: GITOPS_DEPLOY_REPO_SSH_KEY      
+# availableSecrets:
+#   secretManager:
+#     - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO_SSH_KEY/versions/latest
+#       env: GITOPS_DEPLOY_REPO_SSH_KEY
 
       # cat << EOF > /workspace/.ssh/config
       # Host *
