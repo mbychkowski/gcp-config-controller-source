@@ -9,17 +9,6 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
 
-- id: 'Git ssh-keygen setup'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  dir: /workspace
-  args: 
-  - '-c'
-  - | 
-      mkdir /workspace/.ssh
-      gcloud secrets versions access latest --secret=GITOPS_DEPLOY_REPO_SSH_KEY --format='get(payload.data)' | tr '_-' '/+' | base64 -d > /workspace/.ssh/id_ed25519_cloudbuild
-      chmod 400 /workspace/.ssh/id_ed25519_cloudbuild
-
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
   entrypoint: 'sh'
@@ -27,14 +16,11 @@ steps:
   args: 
   - '-c'
   - | 
-      eval "$(ssh-agent -s)"
-      ssh-add /workspace/.ssh/id_ed25519_cloudbuild
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
-      ssh -T git@github.com
-      git clone git@github.com:mbychkowski/gcp-config-controller-deploy.git
+      git clone https://$GITOPS_DEPLOY_GH_USERNAME:$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
-  waitFor: ["Git ssh-keygen setup"] 
+  secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
 
 # - id: "GitOps blueprint"
 #   name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
@@ -44,14 +30,9 @@ steps:
 #     - '-c'
 #     - |
 
-# availableSecrets:
-#   secretManager:
-#     - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_REPO_SSH_KEY/versions/latest
-#       env: GITOPS_DEPLOY_REPO_SSH_KEY
-
-      # cat << EOF > /workspace/.ssh/config
-      # Host *
-      #   AddKeysToAgent yes
-      #   UseKeychain yes
-      #   IdentityFile /workspace/.ssh/id_ed25519_cloudbuild
-      # EOF
+availableSecrets:
+  secretManager:
+    - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_GH_TOKEN/versions/latest
+      env: GITOPS_DEPLOY_GH_TOKEN
+    - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_GH_USERNAME/versions/latest
+      env: GITOPS_DEPLOY_GH_USERNAME      

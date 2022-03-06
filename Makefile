@@ -101,6 +101,16 @@ ssh-key:
 	--data-file=id_ed25519_cloudbuild;
 	@rm id_ed25519_cloudbuild
 
+gh-token:
+	@export _KEY_1=GITOPS_DEPLOY_GH_TOKEN
+	@export _KEY_2=GITOPS_DEPLOY_GH_USERNAME
+	@echo -n ${GH_TOKEN} | gcloud secrets create $$_KEY_1 \
+	--replication-policy="automatic" \
+	--data-file=-;
+	@echo -n ${GH_USERNAME} | gcloud secrets create $$_KEY_2 \
+	--replication-policy="automatic" \
+	--data-file=-;
+
 enable-argolis-org-policies: create-org-policies
 	@gcloud org-policies set-policy .hack/org-policy/shieldedVm.yaml
 	@gcloud org-policies set-policy .hack/org-policy/vmCanIpForward.yaml
