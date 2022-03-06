@@ -18,7 +18,7 @@ steps:
   - | 
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
-      git clone https://$GITOPS_DEPLOY_GH_USERNAME:$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-deploy.git
+      git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-deploy.git
       ls gcp-config-controller-deploy
   secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
 
