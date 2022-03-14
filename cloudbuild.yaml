@@ -1,11 +1,13 @@
 steps:
 - id: 'Branch name'
   name: 'alpine'
-  entrypoint: 'sh'  
+  entrypoint: 'sh'
+  dir: /workspace/$REPO_NAME
   args: 
   - '-c'
   - | 
       echo "***********************"
+      echo "$REPO_NAME"
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
