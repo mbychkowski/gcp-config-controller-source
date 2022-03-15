@@ -12,6 +12,9 @@ steps:
       echo "***********************"
       pwd
       ls
+      cd ..
+      pwd
+      ls
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
