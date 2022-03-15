@@ -11,7 +11,7 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      mv -v /workspace/* /workspace/$REPO_NAME/
+      mv -v /workspace/!($REPO_NAME) /workspace/$REPO_NAME/
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
