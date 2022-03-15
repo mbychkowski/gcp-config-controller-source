@@ -11,7 +11,7 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      ls $REPO_NAME
+      ls
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
