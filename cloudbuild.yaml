@@ -2,7 +2,7 @@ steps:
 - id: 'Branch name'
   name: 'alpine'
   entrypoint: 'sh'
-  dir: /workspace/$REPO_NAME
+  dir: $REPO_NAME
   args: 
   - '-c'
   - | 
@@ -11,7 +11,7 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      ls
+      ls $REPO_NAME
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
