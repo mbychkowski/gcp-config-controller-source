@@ -1,5 +1,5 @@
 steps:
-- id: 'Branch name'
+- id: 'Git repo'
   name: 'alpine'
   entrypoint: 'sh'
   dir: $REPO_NAME
@@ -12,7 +12,6 @@ steps:
       echo "***********************"
       pwd
       mv -v /workspace/* /workspace/$REPO_NAME/
-      ls
 
 - id: 'Git clone deploy repo'
   name: 'alpine/git'
@@ -21,11 +20,10 @@ steps:
   args: 
   - '-c'
   - | 
-      ls
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
       git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-deploy.git
-      ls gcp-config-controller-deploy
+      ls
   secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
 
 # - id: 'Git clone deploy repo'
@@ -36,13 +34,19 @@ steps:
 #   - '-c'
 #   - | 
 
-# - id: "GitOps blueprint"
-#   name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-#   dir: /workspace
-#   entrypoint: /bin/bash
-#   args:
-#     - '-c'
-#     - |
+- id: "Deploy GitOps blueprint"
+  name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+  dir: /workspace
+  entrypoint: /bin/bash
+  args:
+    - '-c'
+    - |
+        cd $REPO_NAME
+        kpt fn render ./gitops
+        git status
+        kubectl apply --wait -f ./gitops --recursive
+        kubectl wait --for=condition=READY --timeout=300s -f ./gitops/source-repositories.yaml
+  waitFor: ["Git repo"]
 
 availableSecrets:
   secretManager:

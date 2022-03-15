@@ -19,7 +19,7 @@ metadata:
   name: config-management
 spec:
   clusterName: cluster-name # kpt-set: ${cluster-name}
-  enableMultiRepo: false
+  enableMultiRepo: true
   git:
     gcpServiceAccountEmail: sync-cluster-name@project-id.iam.gserviceaccount.com # kpt-set: sync-${cluster-name}@${project-id}.iam.gserviceaccount.com
     policyDir: config # kpt-set: ${configsync-dir}

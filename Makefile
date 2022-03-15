@@ -101,7 +101,7 @@ ssh-key:
 	--data-file=id_ed25519_cloudbuild;
 	@rm id_ed25519_cloudbuild
 
-gh-token:
+gh-token-secrets:
 	@export _KEY_1=GITOPS_DEPLOY_GH_TOKEN
 	@export _KEY_2=GITOPS_DEPLOY_GH_USERNAME
 	@echo -n ${GH_TOKEN} | gcloud secrets create $$_KEY_1 \
