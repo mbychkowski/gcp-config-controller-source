@@ -2,7 +2,10 @@ steps:
 - id: 'Git repo'
   name: 'alpine'
   entrypoint: 'sh'
-  dir: $REPO_NAME
+  volumes:
+  - name: $REPO_NAME
+    path: /workspace/$REPO_NAME
+  dir: /workspace/$REPO_NAME
   args: 
   - '-c'
   - | 
@@ -11,7 +14,6 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      mv -v /workspace/* /workspace/$REPO_NAME/
       ls
 
 - id: 'Git clone deploy repo'
@@ -43,6 +45,7 @@ steps:
     - '-c'
     - |
         cd $REPO_NAME
+        git remote -v
         kpt fn render ./gitops
         git status
         kubectl apply --wait -f ./gitops --recursive
