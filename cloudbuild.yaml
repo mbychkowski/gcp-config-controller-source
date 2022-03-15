@@ -11,7 +11,7 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      mv ../* /workspace/$REPO_NAME/*
+      mv -v /workspace/* /workspace/$REPO_NAME/
       ls
 
 - id: 'Git clone deploy repo'
