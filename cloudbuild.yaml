@@ -3,9 +3,9 @@ steps:
   name: 'alpine'
   entrypoint: 'sh'
   volumes:
-  - name: $REPO_NAME
-    path: /workspace/$REPO_NAME
-  dir: /workspace/$REPO_NAME
+  - name: source-repo
+    path: /workspace/source-repo
+  dir: /workspace/soure-repo
   args: 
   - '-c'
   - | 
@@ -39,12 +39,11 @@ steps:
 
 - id: "Deploy GitOps blueprint"
   name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-  dir: /workspace
+  dir: /workspace/source-repo
   entrypoint: /bin/bash
   args:
     - '-c'
     - |
-        cd $REPO_NAME
         git remote -v
         kpt fn render ./gitops
         git status
