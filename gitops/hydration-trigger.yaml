@@ -18,11 +18,11 @@
 apiVersion: cloudbuild.cnrm.cloud.google.com/v1beta1
 kind: CloudBuildTrigger
 metadata:
-  name: source-repo-cicd-trigger # kpt-set: ${source-repo}-cicd-trigger
+  name: gcp-config-controller-source-cicd-trigger # kpt-set: ${source-repo}-cicd-trigger
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: cnrm/gitops/v0.4.2,kpt-fn
-    cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}
+    cnrm.cloud.google.com/blueprint: cnrm/gitops/v0.4.2,kpt-fn-live
+    cnrm.cloud.google.com/project-id: kpt-bootstrap-001 # kpt-set: ${project-id}
 spec:
   build:
     step:
@@ -34,7 +34,7 @@ spec:
           - '-c'
           - |
             set -e
-            gcloud source repos clone $_DEPLOYMENT_REPO .
+            git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@$_DEPLOYMENT_REPO .
             (git show-branch $BRANCH_NAME &>/dev/null) && (git checkout $BRANCH_NAME) || (git checkout -b $BRANCH_NAME)
             git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
             mkdir -p /deployment-workspace/config
@@ -42,6 +42,7 @@ spec:
         entrypoint: /bin/sh
         id: "Clone Deployment Repo"
         timeout: 300s
+        secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
       - name: gcr.io/kpt-dev/kpt:v1.0.0-beta.9
         volumes:
           - name: hydrated-workspace
@@ -93,10 +94,16 @@ spec:
   description: Cloud Build Trigger for rendering from the soure repo to the deployment repo.
   disabled: false
   substitutions:
-    "_ADMIN_CLUSTER_NAME": "cluster-name" # kpt-set: ${cluster-name}
-    "_DEPLOYMENT_REPO": "deployment-repo" # kpt-set: ${deployment-repo}
-    "_SOURCE_REPO": "source-repo" # kpt-set: ${source-repo}
+    "_ADMIN_CLUSTER_NAME": "krmapihost-config-controller" # kpt-set: ${cluster-name}
+    "_DEPLOYMENT_REPO": "https://github.com/mbychkowski/gcp-config-controller-deploy.git" # kpt-set: ${deployment-repo}
+    "_SOURCE_REPO": "https://github.com/mbychkowski/gcp-config-controller-source.git" # kpt-set: ${source-repo}
   triggerTemplate:
     branchName: ".*"
     repoRef:
-      name: source-repo # kpt-set: ${source-repo}
+      name: https://github.com/mbychkowski/gcp-config-controller-source.git # kpt-set: ${source-repo}
+  availableSecrets:
+    secretManager:
+      - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_GH_TOKEN/versions/latest
+        env: GITOPS_DEPLOY_GH_TOKEN
+      - versionName: projects/${PROJECT_ID}/secrets/GITOPS_DEPLOY_GH_USERNAME/versions/latest
+        env: GITOPS_DEPLOY_GH_USERNAME

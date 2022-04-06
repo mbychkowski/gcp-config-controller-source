@@ -25,5 +25,5 @@ data:
   cluster-name: krmapihost-config-controller
   # You can leave these defaults
   namespace: config-control
-  deployment-repo: deployment-repo
-  source-repo: source-repo
+  deployment-repo: https://github.com/mbychkowski/gcp-config-controller-deploy.git
+  source-repo: https://github.com/mbychkowski/gcp-config-controller-source.git

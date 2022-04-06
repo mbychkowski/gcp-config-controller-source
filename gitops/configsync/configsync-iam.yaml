@@ -16,48 +16,29 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMServiceAccount
 metadata:
-  name: sync-cluster-name # kpt-set: sync-${cluster-name}
+  name: sync-krmapihost-config-controller # kpt-set: sync-${cluster-name}
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: cnrm/gitops/configsync/v0.4.2,kpt-fn
-    cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}
+    cnrm.cloud.google.com/blueprint: cnrm/gitops/configsync/v0.4.2,kpt-fn-live
+    cnrm.cloud.google.com/project-id: kpt-bootstrap-001 # kpt-set: ${project-id}
 spec:
-  displayName: sync-cluster-name # kpt-set: sync-${cluster-name}
+  displayName: sync-krmapihost-config-controller # kpt-set: sync-${cluster-name}
 ---
 # Allow Config Sync Kubernetes ServiceAccount (KSA) to use the Config Sync GSA
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPartialPolicy
 metadata:
-  name: sync-cluster-name # kpt-set: sync-${cluster-name}
+  name: sync-krmapihost-config-controller # kpt-set: sync-${cluster-name}
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: cnrm/gitops/configsync/v0.4.2,kpt-fn
-    cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}
+    cnrm.cloud.google.com/blueprint: cnrm/gitops/configsync/v0.4.2,kpt-fn-live
+    cnrm.cloud.google.com/project-id: kpt-bootstrap-001 # kpt-set: ${project-id}
 spec:
   resourceRef:
-    name: sync-cluster-name # kpt-set: sync-${cluster-name}
+    name: sync-krmapihost-config-controller # kpt-set: sync-${cluster-name}
     apiVersion: iam.cnrm.cloud.google.com/v1beta1
     kind: IAMServiceAccount
   bindings:
     - role: roles/iam.workloadIdentityUser
       members:
-        - member: serviceAccount:project-id.svc.id.goog[config-management-system/importer] # kpt-set: serviceAccount:${project-id}.svc.id.goog[config-management-system/importer]
----
-# Allow Config Sync GSA to read from CSR repos in the CSR project
-apiVersion: iam.cnrm.cloud.google.com/v1beta1
-kind: IAMPartialPolicy
-metadata:
-  name: source-reader-sync-cluster-name-project-id # kpt-set: source-reader-sync-${cluster-name}-${project-id}
-  namespace: config-control # kpt-set: ${namespace}
-  annotations:
-    cnrm.cloud.google.com/blueprint: cnrm/gitops/configsync/v0.4.2,kpt-fn
-    cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}
-spec:
-  resourceRef:
-    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-    kind: Project
-    external: project-id # kpt-set: ${project-id}
-  bindings:
-    - role: roles/source.reader
-      members:
-        - member: serviceAccount:sync-cluster-name@project-id.iam.gserviceaccount.com # kpt-set: serviceAccount:sync-${cluster-name}@${project-id}.iam.gserviceaccount.com
+        - member: serviceAccount:kpt-bootstrap-001.svc.id.goog[config-management-system/importer] # kpt-set: serviceAccount:${project-id}.svc.id.goog[config-management-system/importer]
