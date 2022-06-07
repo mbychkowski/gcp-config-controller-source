@@ -1,14 +1,12 @@
-apiVersion: configsync.gke.io/v1beta1
-kind: RootSync
-metadata:
-  name: root-sync
-  namespace: config-management-system
-spec:
-  sourceFormat: unstructured
-  git:
-    revision: HEAD
-    branch: main
-    dir: .
-    auth: ssh
-    secretRef:
-      name: git-creds
+# apiVersion: configsync.gke.io/v1beta1
+# kind: RootSync
+# metadata:
+#   name: root-sync
+#   namespace: config-management-system
+# spec:
+#   sourceFormat: unstructured
+#   git:
+#     revision: HEAD
+#     branch: main
+#     dir: .
+#     auth: ssh

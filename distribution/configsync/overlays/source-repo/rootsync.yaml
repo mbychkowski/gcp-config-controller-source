@@ -3,5 +3,12 @@ kind: RootSync
 metadata:
   name: root-sync
 spec:
+  sourceFormat: unstructured
   git:
     repo: git-cc-source-repo
+    secretRef:
+      name: git-cc-source-repo
+    revision: HEAD
+    branch: main
+    dir: .
+    auth: ssh

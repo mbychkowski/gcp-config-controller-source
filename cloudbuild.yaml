@@ -1,5 +1,5 @@
 steps:
-- id: 'Git repo'
+- id: 'git-repo-status'
   name: 'alpine'
   entrypoint: 'sh'
   volumes:
@@ -15,8 +15,19 @@ steps:
       echo "***********************"
       pwd
       ls
+  
+- id: 'kustomize-build'
+  name: 'lyft/kustomizer'
+  volumes:
+  - name: source-repo
+    path: /workspace/source-repo
+  dir: /workspace/soure-repo
+  args: 
+  - '-c'
+  - | 
+      kustomize build distribution
 
-- id: 'Git clone deploy repo'
+- id: 'git-push'
   name: 'alpine/git'
   entrypoint: 'sh'
   dir: /workspace
