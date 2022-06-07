@@ -1,0 +1,7 @@
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: root-sync
+spec:
+  git:
+    repo: git-cc-source-repo

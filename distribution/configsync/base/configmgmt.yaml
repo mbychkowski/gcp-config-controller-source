@@ -6,3 +6,6 @@ spec:
   enableMultiRepo: true
   policyController:
     enabled: true
+    logDeniesEnabled: true
+    referentialRulesEnabled: true
+    templateLibraryInstalled: true

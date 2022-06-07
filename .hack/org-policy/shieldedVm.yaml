@@ -1,4 +1,4 @@
-name: projects/237573725896/policies/compute.requireShieldedVm
+name: projects/327256138501/policies/compute.requireShieldedVm
 spec:
   rules:
   - enforce: false

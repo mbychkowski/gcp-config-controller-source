@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat > .hack/org-policy/os_login.yaml << ENDOFFILE
+cat > .hack/org-policy/requireOsLogin.yaml << ENDOFFILE
 name: projects/$1/policies/compute.requireOsLogin
 spec:
   rules:
