@@ -25,7 +25,8 @@ steps:
   args: 
   - '-c'
   - | 
-      kustomize build distribution
+      ls
+      pwd
 
 - id: 'git-push'
   name: 'alpine/git'
