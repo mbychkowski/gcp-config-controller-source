@@ -17,7 +17,7 @@ steps:
       ls
   
 - id: 'kustomize-build'
-  name: 'lyft/kustomizer'
+  name: 'docker.io/lyft/kustomizer'
   volumes:
   - name: source-repo
     path: /workspace/source-repo

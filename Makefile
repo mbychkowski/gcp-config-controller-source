@@ -37,13 +37,11 @@ initial-roles:
 	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID} --condition=None --member="group:${GCP_BILLING_ADMIN}" 	 --role="roles/billing.admin" ${ACCESS_TOKEN_FILE}
 	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID} --condition=None --member="group:${GKE_SECURITY_GROUP}" 	 --role="roles/viewer" ${ACCESS_TOKEN_FILE}
 
+cloud-build-sa:
 	# Bind IAM permissions to the default Cloud Build service account
-	@gcloud projects      add-iam-policy-binding ${CONFIG_CONTROLLER_PROJECT_ID}  --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/owner
-	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/resourcemanager.organizationAdmin	
-	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/resourcemanager.folderAdmin
-	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role="roles/resourcemanager.projectCreator"
-	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role="roles/orgpolicy.policyAdmin"
-	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/billing.user
+	@gcloud projects      			 add-iam-policy-binding ${CONFIG_CONTROLLER_PROJECT_ID}  --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/owner
+	@gcloud resource-manager folders add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/resourcemanager.folderAdmin
+	@gcloud resource-manager folders add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role="roles/resourcemanager.projectCreator"
 
 # AD HOC
 create-org-policies:
