@@ -14,7 +14,7 @@ steps:
 - id: 'kustomize-build'
   name: 'docker.io/lyft/kustomizer:v3.3.0'
   dir: /workspace
-  args: ['run', '-it', '-v', '/workspace:/kustomize', 'kustomize', 'build', distribution]
+  args: ['kustomize', 'build', distribution]
 
 - id: 'git-push'
   name: 'alpine/git'
