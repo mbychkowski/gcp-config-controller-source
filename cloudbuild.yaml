@@ -26,9 +26,9 @@ steps:
       pwd && ls
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
-      git set-url origin https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-source.git
+      git remote set-url origin https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-source.git
       git remote -v
-      
+
       git add -A
       git commit -m "Kustomize build config sync declarative state"
       git status
