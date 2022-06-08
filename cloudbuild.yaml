@@ -23,11 +23,13 @@ steps:
   args: 
   - '-c'
   - | 
+      pwd && ls
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
       git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-source.git
       git add deploy/*
       git commit -m "Kustomize build config sync declarative state"
+      git status
       git push origin main
   secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
 
