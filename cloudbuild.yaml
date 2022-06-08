@@ -10,13 +10,13 @@ steps:
       echo "$REPO_NAME"
       echo "$BRANCH_NAME"
       echo "***********************"
-      pwd
-      ls -la
   
 - id: 'kustomize-build'
   name: 'docker.io/lyft/kustomizer:v3.3.0'
   dir: /workspace
-  args: ['build', 'distribution']
+  args: ['run', '-it', '-v', '/workspace:/kustomize', 'kustomize', 'build', distribution]
+
+']
 
 - id: 'git-push'
   name: 'alpine/git'
