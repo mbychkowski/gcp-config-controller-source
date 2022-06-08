@@ -24,9 +24,7 @@ steps:
   - '-c'
   - | 
       pwd && ls
-      cat deploy/sync.yaml
-      git config --global user.name "Michael Bychkowski"
-      git config --global user.email "mbychkowski@google.com"
+      git remote -v
       git add -A
       git commit -m "Kustomize build config sync declarative state"
       git push -u origin main
