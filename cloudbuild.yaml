@@ -14,7 +14,7 @@ steps:
 - id: 'kustomize-build'
   name: 'docker.io/lyft/kustomizer:v3.3.0'
   dir: /workspace
-  args: ['kustomize', 'build', distribution]
+  args: ['kustomize', 'build', distribution, '>', deploy/sync.yaml]
 
 - id: 'git-push'
   name: 'alpine/git'
@@ -26,7 +26,9 @@ steps:
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
       git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-source.git
-      ls
+      git add deploy/*
+      git commit -m "Kustomize build config sync declarative state"
+      git push origin main
   secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
 
 # - id: 'Git clone deploy repo'
