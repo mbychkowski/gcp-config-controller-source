@@ -4,8 +4,8 @@ steps:
   entrypoint: 'sh'
   volumes:
   - name: source-repo
-    path: /workspace/source-repo
-  dir: /workspace/soure-repo
+    path: /workspace
+  dir: /workspace
   args: 
   - '-c'
   - | 
@@ -20,8 +20,8 @@ steps:
   name: 'docker.io/lyft/kustomizer:v3.3.0'
   volumes:
   - name: source-repo
-    path: /workspace/source-repo
-  dir: /workspace/soure-repo
+    path: /workspace
+  dir: /workspace
   args: ['build', 'distribution']
 
 - id: 'git-push'
