@@ -16,8 +16,6 @@ steps:
   dir: /workspace
   args: ['run', '-it', '-v', '/workspace:/kustomize', 'kustomize', 'build', distribution]
 
-']
-
 - id: 'git-push'
   name: 'alpine/git'
   entrypoint: 'sh'
