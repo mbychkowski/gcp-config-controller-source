@@ -2,7 +2,7 @@ steps:
 - id: 'git-repo-status'
   name: 'alpine'
   entrypoint: 'sh'
-  dir: /
+  dir: /workspace
   args: 
   - '-c'
   - | 
@@ -15,13 +15,13 @@ steps:
   
 - id: 'kustomize-build'
   name: 'docker.io/lyft/kustomizer:v3.3.0'
-  dir: /
+  dir: /workspace
   args: ['build', 'distribution']
 
 - id: 'git-push'
   name: 'alpine/git'
   entrypoint: 'sh'
-  dir: /
+  dir: /workspace
   args: 
   - '-c'
   - | 
