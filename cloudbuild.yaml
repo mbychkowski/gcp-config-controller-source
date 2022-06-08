@@ -2,10 +2,7 @@ steps:
 - id: 'git-repo-status'
   name: 'alpine'
   entrypoint: 'sh'
-  volumes:
-  - name: source-repo
-    path: /workspace
-  dir: /workspace
+  dir: /
   args: 
   - '-c'
   - | 
@@ -14,20 +11,17 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      ls ../
+      ls -la
   
 - id: 'kustomize-build'
   name: 'docker.io/lyft/kustomizer:v3.3.0'
-  volumes:
-  - name: source-repo
-    path: /workspace
-  dir: /workspace
+  dir: /
   args: ['build', 'distribution']
 
 - id: 'git-push'
   name: 'alpine/git'
   entrypoint: 'sh'
-  dir: /workspace
+  dir: /
   args: 
   - '-c'
   - | 
