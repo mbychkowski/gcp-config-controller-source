@@ -14,7 +14,7 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
       pwd
-      ls
+      ls ../
   
 - id: 'kustomize-build'
   name: 'docker.io/lyft/kustomizer:v3.3.0'
@@ -22,11 +22,7 @@ steps:
   - name: source-repo
     path: /workspace/source-repo
   dir: /workspace/soure-repo
-  args: 
-  - '-c'
-  - | 
-      ls
-      pwd
+  args: ['build', 'distribution']
 
 - id: 'git-push'
   name: 'alpine/git'
@@ -37,7 +33,7 @@ steps:
   - | 
       git config --global user.name "Michael Bychkowski"
       git config --global user.email "mbychkowski@google.com"
-      git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-deploy.git
+      git clone https://$$GITOPS_DEPLOY_GH_USERNAME:$$GITOPS_DEPLOY_GH_TOKEN@github.com/mbychkowski/gcp-config-controller-source.git
       ls
   secretEnv: ['GITOPS_DEPLOY_GH_TOKEN', 'GITOPS_DEPLOY_GH_USERNAME']
 
