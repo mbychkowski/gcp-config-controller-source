@@ -18,11 +18,18 @@ authenticate:
 
 create-project: 
   # Create a GCP landing zone project
-	@gcloud projects create ${CONFIG_CONTROLLER_PROJECT_ID} --folder=${ORG_OR_FOLDER_ID} --set-as-default --access-token-file ${ACCESS_TOKEN_FILE}
-	@gcloud beta billing projects link ${CONFIG_CONTROLLER_PROJECT_ID} --billing-account=${BILLING_ACCOUNT_ID} --access-token-file ${ACCESS_TOKEN_FILE}
-	@gcloud config set project ${CONFIG_CONTROLLER_PROJECT_ID}
+	@gcloud projects create ${PROJECT_ID} --folder=${ORG_OR_FOLDER_ID} --set-as-default --access-token-file ${ACCESS_TOKEN_FILE}
+	@gcloud beta billing projects link ${PROJECT_ID} --billing-account=${BILLING_ACCOUNT_ID} --access-token-file ${ACCESS_TOKEN_FILE}
+	@gcloud config set project ${PROJECT_ID}
 
-# One time landing zone setup
+enable-apis:
+	@gcloud --project ${PROJECT_ID} services enable \
+		cloudbuild.googleapis.com \
+		krmapihosting.googleapis.com \
+		cloudresourcemanager.googleapis.com \
+		compute.googleapis.com
+
+# One time landing zone setup for ORGANIZATION
 super-user:
 	# Assign Org and Project-level IAM permissions to your Argolis super-user
 	@gcloud organizations add-iam-policy-binding ${ORG_OR_FOLDER_ID} --condition=None --member="user:${GCP_SUPER_USER}" --role="roles/resourcemanager.organizationAdmin" ${ACCESS_TOKEN_FILE}
@@ -39,13 +46,13 @@ initial-roles:
 
 cloud-build-sa:
 	# Bind IAM permissions to the default Cloud Build service account
-	@gcloud projects      			 add-iam-policy-binding ${CONFIG_CONTROLLER_PROJECT_ID}  --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/owner
-	@gcloud resource-manager folders add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/resourcemanager.folderAdmin
-	@gcloud resource-manager folders add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${CONFIG_CONTROLLER_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role="roles/resourcemanager.projectCreator"
+	@gcloud projects      			 add-iam-policy-binding ${PROJECT_ID}  --condition=None --member="serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/owner
+	@gcloud resource-manager folders add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role=roles/resourcemanager.folderAdmin
+	@gcloud resource-manager folders add-iam-policy-binding ${ORG_OR_FOLDER_ID}              --condition=None --member="serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" --role="roles/resourcemanager.projectCreator"
 
 # AD HOC
 create-org-policies:
-	sh .hack/org-policy/create.sh ${CONFIG_CONTROLLER_PROJECT_NUMBER}
+	sh .hack/org-policy/create.sh ${PROJECT_NUMBER}
 
 ssh-key:
 	@export _KEY=GITOPS_DEPLOY_REPO_SSH_KEY
@@ -73,5 +80,5 @@ enable-argolis-org-policies: create-org-policies
 
 .PHONY: replace-project-id
 replace-project-id:
-	@sed -i s/CONFIG_CONTROLLER_PROJECT_ID/${CONFIG_CONTROLLER_PROJECT_ID}/g environments/${ENV}/terraform.tfvars
-	@sed -i s/CONFIG_CONTROLLER_PROJECT_ID/${CONFIG_CONTROLLER_PROJECT_ID}/g environments/${ENV}/backend.tf
+	@sed -i s/PROJECT_ID/${PROJECT_ID}/g environments/${ENV}/terraform.tfvars
+	@sed -i s/PROJECT_ID/${PROJECT_ID}/g environments/${ENV}/backend.tf
